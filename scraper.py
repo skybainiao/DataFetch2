@@ -15,17 +15,18 @@ import threading
 import requests  # 用于发送数据到其他服务器
 
 # 配置部分
-USERNAME = 'dtycDM1'          # 替换为您的实际用户名
-PASSWORD = 'dddd1111DD'       # 替换为您的实际密码
+USERNAME = 'dtycDM1'  # 替换为您的实际用户名
+PASSWORD = 'dddd1111DD'  # 替换为您的实际密码
 BASE_URL = 'https://123.108.119.156/'  # 登录页面的URL
 
 # 目标服务器的URL（用于发送数据）
 TARGET_SERVER_URL = 'https://yourserver.com/receive_data'  # 替换为您的目标服务器URL
 
+
 def init_driver():
     chrome_options = Options()
     # 取消无头模式，便于观察浏览器行为
-    # chrome_options.add_argument('--headless')  # 调试完成后可取消注释
+    chrome_options.add_argument('--headless')  # 调试完成后可取消注释
     chrome_options.add_argument('--disable-gpu')
     chrome_options.add_argument('--window-size=1920,1080')
     # 忽略 SSL 证书错误
@@ -50,39 +51,41 @@ def init_driver():
     print("WebDriver 初始化完成")
     return driver
 
+
 def login(driver):
     driver.get(BASE_URL)
     wait = WebDriverWait(driver, 30)
 
     try:
         # 打印登录尝试信息
-        print(f"尝试使用用户名: {USERNAME} 和密码: {PASSWORD} 登录")
+        print(f"正在登录")
 
         # 等待并找到用户名输入框
         username_field = wait.until(EC.visibility_of_element_located((By.ID, 'usr')))
         password_field = wait.until(EC.visibility_of_element_located((By.ID, 'pwd')))
-        print("找到用户名和密码输入框")
+        # print("找到用户名和密码输入框")
 
         # 输入用户名和密码
         username_field.clear()
         username_field.send_keys(USERNAME)
         password_field.clear()
         password_field.send_keys(PASSWORD)
-        print("已输入用户名和密码")
+        # print("已输入用户名和密码")
 
         # 等待登录按钮可点击并点击
         login_button = wait.until(EC.element_to_be_clickable((By.ID, 'btn_login')))
         login_button.click()
-        print("已点击登录按钮")
+        # print("已点击登录按钮")
 
         # 处理可能出现的 passcode 弹窗
         try:
             popup_wait = WebDriverWait(driver, 5)  # 设置较短的等待时间
             no_button = popup_wait.until(EC.element_to_be_clickable((By.ID, 'C_no_btn')))
             no_button.click()
-            print("已点击 'NO' 按钮，关闭 passcode 弹窗")
+            # print("已点击 'NO' 按钮，关闭 passcode 弹窗")
         except:
-            print("未发现 passcode 弹窗，继续执行")
+            pass
+            # print("未发现 passcode 弹窗，继续执行")
 
         # 等待足球按钮出现，确认登录成功
         wait.until(EC.visibility_of_element_located((By.XPATH, '//div[span[text()="Soccer"]]')))
@@ -92,13 +95,14 @@ def login(driver):
         print(f"登录失败: {e}")
         return False
 
+
 def navigate_to_football(driver):
     wait = WebDriverWait(driver, 30)
     try:
         # 使用文本内容定位足球按钮
         football_button = wait.until(EC.element_to_be_clickable((By.XPATH, '//div[span[text()="Soccer"]]')))
         football_button.click()
-        print("已点击足球按钮，正在导航到足球页面")
+        print("正在导航到足球页面")
 
         # 等待比赛列表容器加载完成
         wait.until(EC.visibility_of_element_located((By.ID, 'div_show')))
@@ -112,6 +116,7 @@ def navigate_to_football(driver):
     except Exception as e:
         print(f"导航到足球页面失败: {e}")
         return False
+
 
 def fetch_data(driver):
     try:
@@ -200,8 +205,10 @@ def fetch_data(driver):
                             odds_buttons = odds_section.find_all('div', class_='btn_lebet_odd')
                             for btn in odds_buttons:
                                 # 获取盘口详情
-                                bet_detail_tag = btn.find(['tt', 'span'], class_=lambda x: x and ('text_ballhead' in x or 'text_ballou' in x))
-                                bet_detail = bet_detail_tag.get_text(strip=True) if bet_detail_tag else "Unknown Bet Detail"
+                                bet_detail_tag = btn.find(['tt', 'span'], class_=lambda x: x and (
+                                            'text_ballhead' in x or 'text_ballou' in x))
+                                bet_detail = bet_detail_tag.get_text(
+                                    strip=True) if bet_detail_tag else "Unknown Bet Detail"
 
                                 # 获取赔率值
                                 odd_value_tag = btn.find('span', class_='text_odds')
@@ -233,6 +240,7 @@ def fetch_data(driver):
         print(f"抓取数据失败: {e}")
         return []
 
+
 def save_to_csv(data, filename='matches.csv'):
     if not data:
         print("没有数据可保存。")
@@ -263,6 +271,7 @@ def save_to_csv(data, filename='matches.csv'):
             dict_writer.writerow(row)
     print(f"数据已保存到 {filename}")
 
+
 def send_data_to_server(data):
     try:
         # 将数据转换为JSON格式
@@ -274,6 +283,7 @@ def send_data_to_server(data):
             print(f"发送数据失败，状态码: {response.status_code}")
     except Exception as e:
         print(f"发送数据时发生错误: {e}")
+
 
 def run_scraper():
     driver = init_driver()
@@ -303,6 +313,7 @@ def run_scraper():
     finally:
         driver.quit()
         print("已关闭浏览器")
+
 
 if __name__ == "__main__":
     run_scraper()
