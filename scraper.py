@@ -272,19 +272,6 @@ def save_to_csv(data, filename='matches.csv'):
     print(f"数据已保存到 {filename}")
 
 
-def send_data_to_server(data):
-    try:
-        # 将数据转换为JSON格式
-        json_data = {'matches': data}
-        response = requests.post(TARGET_SERVER_URL, json=json_data)
-        if response.status_code == 200:
-            print("数据已成功发送到服务器")
-        else:
-            print(f"发送数据失败，状态码: {response.status_code}")
-    except Exception as e:
-        print(f"发送数据时发生错误: {e}")
-
-
 def run_scraper():
     driver = init_driver()
     try:
@@ -298,8 +285,6 @@ def run_scraper():
                         print(f"抓取到 {len(data)} 场比赛的数据")
                         # 保存到CSV
                         save_to_csv(data)
-                        # 发送数据到服务器
-                        send_data_to_server(data)
                     else:
                         print("未抓取到任何数据")
 

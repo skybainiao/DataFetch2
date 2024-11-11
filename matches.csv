@@ -1,6 +1,12 @@
-league,match_time,home_team,away_team,home_score,away_score,1 X 2 - 1,1 X 2 - 2,1 X 2 - X,BTTS - No,BTTS - Yes,HDP - +0.5,HDP - +0/0.5,HDP - -0.5,HDP - -0/0.5,HDP - 0,Next Goal - 1,Next Goal - 2,Next Goal - X,O/E - Even,O/E - Odd,O/U - O,O/U - U,Team 1 Goals - O,Team 1 Goals - U,Team 2 Goals - O,Team 2 Goals - U
-Brazil Serie A,1H29:56,Palmeiras SP,Gremio Porto Alegrense RS,0,0,,,,,,,,,,,,,,,,,,,,,
-Mexico Liga MX Women - PlayOff,2H83:57,CD Guadalajara Chivas (W),Club America (W),1,4,,,,,,,0.46,,1.61,,7.0,3.55,1.44,3.04,1.35,1.47,0.50,3.22,0.08,2.04,0.26
-Mexico Liga MX Women - PlayOff,HT,Deportivo Toluca (W),Monterrey (W),1,0,1.85,4.05,3.00,2.67,1.40,0.86,,0.98,,,3.35,1.75,3.95,2.01,1.85,0.95,0.87,1.20,0.60,1.04,0.73
-Uruguay Primera Division,2H70:01,Racing Club Montevideo,Club Nacional Montevideo,0,1,23.0,1.07,7.00,1.19,3.25,,0.96,,0.88,,5.1,2.17,2.16,2.29,1.63,1.00,0.82,2.38,0.19,1.03,0.74
-Argentina Primera B Metropolitana - PlayOff,2H67:13,Excursionistas,Ferrocarril Midland,1,1,3.35,5.00,1.53,,,,,,,1.26,3.20,4.60,1.69,1.49,2.58,1.02,0.70,1.53,0.32,2.00,0.17
+league,match_time,home_team,away_team,home_score,away_score,1 X 2 - 1,1 X 2 - 2,1 X 2 - X,1H1 X 2 - 1,1H1 X 2 - 2,1H1 X 2 - X,1HHDP - +0/0.5,1HHDP - -0/0.5,1HHDP - 0,1HO/U - O,1HO/U - U,BTTS - No,BTTS - Yes,HDP - +0.5,HDP - +0.5/1,HDP - +0/0.5,HDP - -0.5,HDP - -0.5/1,HDP - -0/0.5,HDP - 0,Next Goal - 1,Next Goal - 2,Next Goal - X,O/E - Even,O/E - Odd,O/U - O,O/U - U,Team 1 Goals - O,Team 1 Goals - U,Team 2 Goals - O,Team 2 Goals - U
+Argentina Liga Profesional,1H04:00,Sarmiento De Junin,Boca Juniors,0,0,3.80,2.03,3.10,4.75,2.75,1.90,0.74,1.19,,0.96,0.92,1.52,2.30,0.88,,,1.02,,,,2.77,1.78,6.3,,,1.07,0.81,,,,
+Mexico Liga MX,2H69:58,Necaxa,Atlas,0,0,4.80,4.90,1.50,,,,,,,,,,,,,,,,,0.99,4.05,4.10,1.70,1.45,2.78,1.23,0.69,2.12,0.30,2.17,0.29
+Colombia Primera A,2H51:29,Aguilas Doradas,Boyaca Chico,0,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Mexico League U23,HT,Club Tijuana U23,Puebla U23,0,0,2.81,2.81,2.45,,,,,,,,,1.27,3.30,,,,,,,0.92,2.35,2.35,3.70,1.84,2.02,0.80,1.02,0.79,0.98,0.79,0.98
+Paraguay Primera Division,2H48:17,Club Guarani Asuncion,Sol De America,0,0,2.96,3.30,2.09,,,,,,,,,1.12,5.0,,,,,,,1.05,2.54,2.78,2.73,1.75,2.14,0.98,0.88,1.11,0.71,1.23,0.62
+Guatemala Liga Nacional,1H27:48,CSD Comunicaciones,Deportivo Guastatoya,0,0,1.53,6.00,3.05,3.20,8.30,1.40,0.54,1.21,,1.31,0.48,1.26,3.40,,0.94,,,0.78,,,1.55,4.25,4.20,,,0.98,0.74,,,,
+Honduras Liga Nacional,2H62:33,Olancho,CD Victoria La Ceiba,2,0,1.01,14.5,10.0,,,,,,,,,1.38,2.36,,,0.67,,,1.05,,2.42,3.55,2.36,1.72,2.16,1.06,0.66,0.96,0.71,1.38,0.39
+USL Championship - PlayOff,HT,Colorado Springs Switchbacks,Orange County,1,1,1.92,5.00,2.50,,,,,,,,,,,0.91,,,0.93,,,,1.76,3.85,3.65,1.85,2.04,0.81,1.01,1.13,0.71,1.49,0.50
+Costa Rica Primera Division,1H32:12,Sporting San Jose,Municipal Perez Zeledon,0,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Nicaragua Primera Division,1H36:02,Rancho Santana,CD Ocotal,1,0,1.28,7.60,4.20,1.04,23.0,7.10,,,1.06,1.88,0.25,2.06,1.65,,,0.75,,,0.97,,2.05,2.52,4.25,,,0.96,0.76,,,,
+Venezuela Primera Division - PlayOff,1H63:22,Monagas,Estudiantes De Merida,2,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

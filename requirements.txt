@@ -1,3 +1,7 @@
-selenium
+selenium~=4.26.1
 webdriver-manager
 python-dotenv
+
+requests~=2.32.3
+beautifulsoup4~=4.12.3
+flask~=3.0.3
