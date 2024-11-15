@@ -15,7 +15,7 @@ import threading
 import requests  # 用于发送数据到其他服务器
 
 # 配置部分
-USERNAME = 'dtycDM1'  # 替换为您的实际用户名
+USERNAME = 'dtycj0DM4'  # 替换为您的实际用户名
 PASSWORD = 'dddd1111DD'  # 替换为您的实际密码
 BASE_URL = 'https://123.108.119.156/'  # 登录页面的URL
 
@@ -26,7 +26,7 @@ TARGET_SERVER_URL = 'https://yourserver.com/receive_data'  # 替换为您的目�
 def init_driver():
     chrome_options = Options()
     # 取消无头模式，便于观察浏览器行为
-    chrome_options.add_argument('--headless')  # 调试完成后可取消注释
+    #chrome_options.add_argument('--headless')  # 调试完成后可取消注释
     chrome_options.add_argument('--disable-gpu')
     chrome_options.add_argument('--window-size=1920,1080')
     # 忽略 SSL 证书错误

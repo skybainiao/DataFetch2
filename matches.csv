@@ -1,12 +1,8 @@
-league,match_time,home_team,away_team,home_score,away_score,1 X 2 - 1,1 X 2 - 2,1 X 2 - X,1H1 X 2 - 1,1H1 X 2 - 2,1H1 X 2 - X,1HHDP - +0/0.5,1HHDP - -0/0.5,1HHDP - 0,1HO/U - O,1HO/U - U,BTTS - No,BTTS - Yes,HDP - +0.5,HDP - +0.5/1,HDP - +0/0.5,HDP - -0.5,HDP - -0.5/1,HDP - -0/0.5,HDP - 0,Next Goal - 1,Next Goal - 2,Next Goal - X,O/E - Even,O/E - Odd,O/U - O,O/U - U,Team 1 Goals - O,Team 1 Goals - U,Team 2 Goals - O,Team 2 Goals - U
-Argentina Liga Profesional,1H04:00,Sarmiento De Junin,Boca Juniors,0,0,3.80,2.03,3.10,4.75,2.75,1.90,0.74,1.19,,0.96,0.92,1.52,2.30,0.88,,,1.02,,,,2.77,1.78,6.3,,,1.07,0.81,,,,
-Mexico Liga MX,2H69:58,Necaxa,Atlas,0,0,4.80,4.90,1.50,,,,,,,,,,,,,,,,,0.99,4.05,4.10,1.70,1.45,2.78,1.23,0.69,2.12,0.30,2.17,0.29
-Colombia Primera A,2H51:29,Aguilas Doradas,Boyaca Chico,0,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-Mexico League U23,HT,Club Tijuana U23,Puebla U23,0,0,2.81,2.81,2.45,,,,,,,,,1.27,3.30,,,,,,,0.92,2.35,2.35,3.70,1.84,2.02,0.80,1.02,0.79,0.98,0.79,0.98
-Paraguay Primera Division,2H48:17,Club Guarani Asuncion,Sol De America,0,0,2.96,3.30,2.09,,,,,,,,,1.12,5.0,,,,,,,1.05,2.54,2.78,2.73,1.75,2.14,0.98,0.88,1.11,0.71,1.23,0.62
-Guatemala Liga Nacional,1H27:48,CSD Comunicaciones,Deportivo Guastatoya,0,0,1.53,6.00,3.05,3.20,8.30,1.40,0.54,1.21,,1.31,0.48,1.26,3.40,,0.94,,,0.78,,,1.55,4.25,4.20,,,0.98,0.74,,,,
-Honduras Liga Nacional,2H62:33,Olancho,CD Victoria La Ceiba,2,0,1.01,14.5,10.0,,,,,,,,,1.38,2.36,,,0.67,,,1.05,,2.42,3.55,2.36,1.72,2.16,1.06,0.66,0.96,0.71,1.38,0.39
-USL Championship - PlayOff,HT,Colorado Springs Switchbacks,Orange County,1,1,1.92,5.00,2.50,,,,,,,,,,,0.91,,,0.93,,,,1.76,3.85,3.65,1.85,2.04,0.81,1.01,1.13,0.71,1.49,0.50
-Costa Rica Primera Division,1H32:12,Sporting San Jose,Municipal Perez Zeledon,0,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-Nicaragua Primera Division,1H36:02,Rancho Santana,CD Ocotal,1,0,1.28,7.60,4.20,1.04,23.0,7.10,,,1.06,1.88,0.25,2.06,1.65,,,0.75,,,0.97,,2.05,2.52,4.25,,,0.96,0.76,,,,
-Venezuela Primera Division - PlayOff,1H63:22,Monagas,Estudiantes De Merida,2,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+league,match_time,home_team,away_team,home_score,away_score,1 X 2 - 1,1 X 2 - 2,1 X 2 - X,1H1 X 2 - 1,1H1 X 2 - 2,1H1 X 2 - X,1HHDP - +0/0.5,1HHDP - -0/0.5,1HHDP - 0,1HO/U - O,1HO/U - U,BTTS - No,BTTS - Yes,HDP - +0.5/1,HDP - +0/0.5,HDP - -0.5/1,HDP - -0/0.5,HDP - 0,Next Goal - 1,Next Goal - 2,Next Goal - X,O/E - Even,O/E - Odd,O/U - O,O/U - U,Team 1 Goals - O,Team 1 Goals - U,Team 2 Goals - O,Team 2 Goals - U
+Brazil Serie A,1H18:17,Flamengo RJ,Atletico Mineiro,0,0,2.11,3.90,2.87,3.40,5.50,1.60,,,1.51,1.07,0.81,1.32,2.56,,1.11,,0.80,,1.87,2.93,4.90,,,1.03,0.85,,,,
+Uruguay Primera Division,2H61:37,Cerro Largo,Liverpool Montevideo,0,0,3.55,3.95,1.71,,,,,,,,,1.02,8.0,,,,,1.03,3.20,3.20,2.02,1.59,2.36,0.80,1.02,1.63,0.38,1.63,0.38
+Mexico Liga Premier Serie A,2H55:20,Tritones Vallarta,Agricultores Guasave,1,0,1.35,8.60,3.85,,,,,,,,,1.77,1.98,,,,,0.83,2.67,2.50,2.90,2.08,1.78,0.76,1.06,1.06,0.71,0.99,0.78
+Argentina Torneo Regional Federal Amateur,1H12:27,La Emilia,Parana San Nicolas,0,0,2.16,3.20,2.91,3.20,4.40,1.73,,,1.28,0.78,1.04,1.54,2.27,,0.95,,0.89,,1.84,2.46,5.9,,,1.04,0.78,,,,
+Paraguay Cup,1H48:39,Club Libertad,Sportivo Luqueno,1,0,1.29,9.50,4.15,,,,,,,,,1.74,2.01,,,,,1.08,2.36,2.64,3.15,,,1.05,0.77,,,,
+Venezuela Primera Division - PlayOff,1H17:46,Carabobo,Monagas,1,0,1.12,11.5,5.80,1.08,18.5,6.00,0.71,1.01,,0.68,1.04,1.82,1.83,0.82,,0.90,,,1.58,3.15,5.8,,,0.88,0.84,,,,
+Venezuela Primera Division - PlayOff,1H17:43,Deportivo La Guaira,Estudiantes De Merida,0,1,2.69,2.09,3.30,7.30,1.44,3.15,0.81,0.91,,0.89,0.83,5.0,1.12,0.93,,0.79,,,1.52,2.90,8.6,,,0.74,0.98,,,,
