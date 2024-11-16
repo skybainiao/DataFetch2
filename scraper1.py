@@ -22,9 +22,10 @@ BASE_URL = 'https://123.108.119.156/'  # 登录页面的URL
 
 # 定义要抓取的市场类型及其对应的按钮ID
 MARKET_TYPES = {
-    'HDP_OU': 'tab_rnou',   # 请根据实际情况替换为正确的按钮ID
-    'CORNERS': 'tab_cn'      # 请根据实际情况替换为正确的按钮ID
+    'HDP_OU': 'tab_rnou',  # 请根据实际情况替换为正确的按钮ID
+    'CORNERS': 'tab_cn'  # 请根据实际情况替换为正确的按钮ID
 }
+
 
 def init_driver():
     chrome_options = Options()
@@ -46,6 +47,7 @@ def init_driver():
         '''
     })
     return driver
+
 
 def login(driver, username, password):
     driver.get(BASE_URL)
@@ -80,6 +82,7 @@ def login(driver, username, password):
         traceback.print_exc()
         return False
 
+
 def navigate_to_football(driver):
     wait = WebDriverWait(driver, 30)
     try:
@@ -96,6 +99,7 @@ def navigate_to_football(driver):
         traceback.print_exc()
         return False
 
+
 def get_market_data(driver):
     try:
         page_source = driver.page_source
@@ -105,6 +109,7 @@ def get_market_data(driver):
         print(f"获取页面数据失败: {e}")
         traceback.print_exc()
         return None
+
 
 def parse_market_data(soup, market_type):
     data = []
@@ -120,9 +125,6 @@ def parse_market_data(soup, market_type):
                 data.append(match_info)
             match_container = match_container.find_next_sibling()
     return data
-
-
-
 
 
 def extract_match_info(match_container, league_name, market_type):
@@ -208,11 +210,6 @@ def extract_match_info(match_container, league_name, market_type):
         return None
 
 
-
-
-
-
-
 def extract_odds_hdp_ou(odds_section, bet_type, time_indicator):
     odds = {}
     # 找到所有的赔率列
@@ -264,11 +261,6 @@ def extract_odds_hdp_ou(odds_section, bet_type, time_indicator):
     return odds
 
 
-
-
-
-
-
 def extract_odds_corners(odds_section):
     odds = {}
     # 提取时间指示符（FT 或 1H）
@@ -285,6 +277,8 @@ def extract_odds_corners(odds_section):
 
     # 处理每个赔率按钮
     buttons = odds_section.find_all('div', class_='btn_lebet_odd')
+    key_counts = {}  # 用于跟踪键名的出现次数
+
     for btn in buttons:
         odds_tag = btn.find('span', class_='text_odds')
         odds_value = odds_tag.get_text(strip=True) if odds_tag else ''
@@ -325,30 +319,18 @@ def extract_odds_corners(odds_section):
         else:
             key = f"{bet_type}_{time_indicator}_{team_info}_{handicap}_{team}Odds"
 
-        odds[key] = odds_value
+        # 检查键名是否已存在，如果存在，则添加后缀以确保唯一性
+        if key in odds:
+            if key not in key_counts:
+                key_counts[key] = 1
+            key_counts[key] += 1
+            unique_key = f"{key}_{key_counts[key]}"
+        else:
+            unique_key = key
+
+        odds[unique_key] = odds_value
 
     return odds
-
-
-
-
-def click_all_1h_buttons(driver):
-    try:
-        # 等待比赛列表加载完成
-        time.sleep(2)
-        # 查找所有的 1H 按钮
-        one_h_buttons = driver.find_elements(By.XPATH, "//div[contains(@class, 'rnou_btn rnou_btn_1H')]")
-        print(f"找到 {len(one_h_buttons)} 个 1H 按钮")
-        for button in one_h_buttons:
-            try:
-                if button.is_displayed() and button.is_enabled() and 'off' not in button.get_attribute('class'):
-                    driver.execute_script("arguments[0].click();", button)
-                    time.sleep(0.1)  # 短暂等待，避免过快点击
-            except Exception as e:
-                print(f"点击 1H 按钮时发生错误: {e}")
-    except Exception as e:
-        print(f"点击所有 1H 按钮时发生错误: {e}")
-        traceback.print_exc()
 
 
 def save_to_csv(data, filename):
@@ -356,7 +338,8 @@ def save_to_csv(data, filename):
         print(f"没有数据保存到 {filename}")
         return
     # 定义固定的字段名
-    fixed_fields = ['league', 'match_time', 'home_team', 'away_team', 'home_score', 'away_score', 'home_corners', 'away_corners']
+    fixed_fields = ['league', 'match_time', 'home_team', 'away_team', 'home_score', 'away_score', 'home_corners',
+                    'away_corners']
     # 收集所有赔率类型
     odds_fields = set()
     for item in data:
@@ -372,6 +355,7 @@ def save_to_csv(data, filename):
             clean_row = {k: v for k, v in row.items() if k in fieldnames}
             writer.writerow(clean_row)
     print(f"数据保存到 {filename}")
+
 
 def run_scraper(account, market_type, filename):
     driver = init_driver()
@@ -403,15 +387,13 @@ def run_scraper(account, market_type, filename):
                     except Exception as e:
                         print(f"{account['username']} 抓取数据时发生错误: {e}")
                         traceback.print_exc()
-                    time.sleep(1)  # 每秒获取一次数据
+                    #time.sleep(0.5)
     except Exception as e:
         print(f"{account['username']} 运行过程中发生错误: {e}")
         traceback.print_exc()
     finally:
         driver.quit()
         print(f"{account['username']} 已关闭浏览器")
-
-
 
 
 if __name__ == "__main__":
@@ -430,6 +412,3 @@ if __name__ == "__main__":
     for thread in threads:
         thread.join()
     print("所有数据抓取完成")
-
-
-
