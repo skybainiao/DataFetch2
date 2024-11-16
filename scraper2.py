@@ -14,7 +14,7 @@ import traceback
 import os
 
 # 配置部分，请替换为您的实际用户名和密码
-ACCOUNT = {'username': 'dtyc6yDM2', 'password': 'dddd1111DD'}
+ACCOUNT = {'username': 'dtyc6yDM3', 'password': 'dddd1111DD'}
 BASE_URL = 'https://123.108.119.156/'  # 登录页面的URL
 
 # 定义要抓取的市场类型及其对应的按钮ID
