@@ -1,6 +1,9 @@
 # scraper.py
-
+import json
 import threading
+from turtle import pd
+import pandas as pd
+import requests
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
@@ -357,7 +360,54 @@ def save_to_csv(data, filename):
     print(f"数据保存到 {filename}")
 
 
-def run_scraper(account, market_type, filename):
+def send_csv_as_json(csv_file_path, server_url, t, info):
+    """
+    将最新的 CSV 文件内容转换为 JSON 格式，并按指定时间间隔发送到 Java 服务器。
+
+    :param csv_file_path: CSV 文件路径
+    :param server_url: Java 服务器的 URL
+    :param t: 数据发送间隔时间（以秒为单位）
+    :param info: 用于标记日志的类型信息
+    """
+    try:
+        # 循环发送数据
+        while True:
+            try:
+                # 读取 CSV 文件
+                data = pd.read_csv(csv_file_path)
+
+                # 用空字符串替换 NaN 或 inf 值
+                data = data.fillna("")  # 替换 NaN
+                data = data.replace([float('inf'), float('-inf')], "")  # 替换 inf 和 -inf
+
+                # 将数据转换为 JSON 格式
+                json_data = data.to_dict(orient='records')
+
+                print(f"正在发送 {info} 数据...")
+
+                # 发送数据
+                headers = {'Content-Type': 'application/json'}
+                response = requests.post(server_url, json=json_data, headers=headers)
+
+                # 检查服务器响应
+                if response.status_code == 200:
+                    print(f"{info} 数据成功发送到服务器: {server_url}")
+                else:
+                    print(f"{info} 发送失败，状态码: {response.status_code}, 响应: {response.text}")
+
+            except FileNotFoundError:
+                print(f"文件未找到: {csv_file_path}")
+            except Exception as e:
+                print(f"处理 CSV 文件时发生错误: {e}")
+
+            # 等待指定时间间隔
+            time.sleep(t)
+
+    except Exception as e:
+        print(f"发送数据时发生错误: {e}")
+
+
+def run_scraper(account, market_type, filename, t):
     driver = init_driver()
     try:
         if login(driver, account['username'], account['password']):
@@ -374,12 +424,14 @@ def run_scraper(account, market_type, filename):
                     traceback.print_exc()
                 # 等待页面加载
                 time.sleep(5)
+
                 # 进入数据抓取循环
                 while True:
                     try:
                         soup = get_market_data(driver)
                         if soup:
                             data = parse_market_data(soup, market_type)
+
                             save_to_csv(data, filename)
                             print(f"{account['username']} 成功获取并保存数据")
                         else:
@@ -387,7 +439,7 @@ def run_scraper(account, market_type, filename):
                     except Exception as e:
                         print(f"{account['username']} 抓取数据时发生错误: {e}")
                         traceback.print_exc()
-                    #time.sleep(0.5)
+                    time.sleep(t)
     except Exception as e:
         print(f"{account['username']} 运行过程中发生错误: {e}")
         traceback.print_exc()
@@ -400,11 +452,12 @@ if __name__ == "__main__":
     # 创建线程列表
     threads = []
     # 第一个线程，获取 HDP & O/U 数据（同时包含全场和上半场）
-    thread1 = threading.Thread(target=run_scraper, args=(ACCOUNTS[0], 'HDP_OU', 'hdp_ou_data.csv'))
+    thread1 = threading.Thread(target=run_scraper, args=(ACCOUNTS[0], 'HDP_OU', 'hdp_ou_data.csv', 0.1))
     threads.append(thread1)
     # 第二个线程，获取 CORNERS 数据
-    thread2 = threading.Thread(target=run_scraper, args=(ACCOUNTS[1], 'CORNERS', 'corners_data.csv'))
+    thread2 = threading.Thread(target=run_scraper, args=(ACCOUNTS[1], 'CORNERS', 'corners_data.csv', 0.1))
     threads.append(thread2)
+
     # 启动线程
     for thread in threads:
         thread.start()

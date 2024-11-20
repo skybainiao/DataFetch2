@@ -26,7 +26,7 @@ TARGET_SERVER_URL = 'https://yourserver.com/receive_data'  # 替换为您的目�
 def init_driver():
     chrome_options = Options()
     # 取消无头模式，便于观察浏览器行为
-    #chrome_options.add_argument('--headless')  # 调试完成后可取消注释
+    chrome_options.add_argument('--headless')  # 调试完成后可取消注释
     chrome_options.add_argument('--disable-gpu')
     chrome_options.add_argument('--window-size=1920,1080')
     # 忽略 SSL 证书错误
