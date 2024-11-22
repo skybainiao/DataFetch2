@@ -10,9 +10,9 @@ if __name__ == "__main__":
         target=lambda: send_csv_as_json('hdp_ou_data.csv', 'http://localhost:8080/api/odds/matches', 0.5, "normal"))
     threads.append(thread3)
 
-    #thread4 = threading.Thread(
-     #   target=lambda: send_csv_as_json('corners_data.csv', 'http://localhost:8080/api/odds/corner-matches', 0.6, "corner"))
-    #threads.append(thread4)
+    thread4 = threading.Thread(
+        target=lambda: send_csv_as_json('corners_data.csv', 'http://localhost:8080/api/odds/corner-matches', 0.5, "corner"))
+    threads.append(thread4)
 
     # 启动线程
     for thread in threads:

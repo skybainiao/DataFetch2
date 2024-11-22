@@ -13,7 +13,6 @@ from bs4 import BeautifulSoup
 import time
 import csv
 import traceback
-import os
 
 # 配置部分，请替换为您的实际用户名和密码
 ACCOUNTS = [
@@ -69,6 +68,7 @@ def login(driver, username, password):
         # 点击登录按钮
         login_button = wait.until(EC.element_to_be_clickable((By.ID, 'btn_login')))
         login_button.click()
+
         # 处理可能的弹窗
         try:
             popup_wait = WebDriverWait(driver, 5)
@@ -81,7 +81,7 @@ def login(driver, username, password):
         print(f"{username} 登录成功")
         return True
     except Exception as e:
-        print(f"{username} 登录失败: {e}")
+        print(f"{username} 未找到滚球比赛")
         traceback.print_exc()
         return False
 
@@ -357,7 +357,7 @@ def save_to_csv(data, filename):
             # 仅包含定义的字段
             clean_row = {k: v for k, v in row.items() if k in fieldnames}
             writer.writerow(clean_row)
-    print(f"数据保存到 {filename}")
+    #print(f"数据保存到 {filename}")
 
 
 def send_csv_as_json(csv_file_path, server_url, t, info):
@@ -369,6 +369,7 @@ def send_csv_as_json(csv_file_path, server_url, t, info):
     :param t: 数据发送间隔时间（以秒为单位）
     :param info: 用于标记日志的类型信息
     """
+    print(f"正在发送 {info} 数据...")
     try:
         # 循环发送数据
         while True:
@@ -383,7 +384,7 @@ def send_csv_as_json(csv_file_path, server_url, t, info):
                 # 将数据转换为 JSON 格式
                 json_data = data.to_dict(orient='records')
 
-                print(f"正在发送 {info} 数据...")
+
 
                 # 发送数据
                 headers = {'Content-Type': 'application/json'}
@@ -391,7 +392,8 @@ def send_csv_as_json(csv_file_path, server_url, t, info):
 
                 # 检查服务器响应
                 if response.status_code == 200:
-                    print(f"{info} 数据成功发送到服务器: {server_url}")
+                    #print(f"{info} 数据成功发送到服务器: {server_url}")
+                    pass
                 else:
                     print(f"{info} 发送失败，状态码: {response.status_code}, 响应: {response.text}")
 
@@ -408,54 +410,57 @@ def send_csv_as_json(csv_file_path, server_url, t, info):
 
 
 def run_scraper(account, market_type, filename, t):
-    driver = init_driver()
-    try:
-        if login(driver, account['username'], account['password']):
-            if navigate_to_football(driver):
-                # 点击指定的市场类型按钮
-                try:
+    while True:
+        driver = None
+        try:
+            driver = init_driver()
+            if login(driver, account['username'], account['password']):
+                if navigate_to_football(driver):
+                    # 点击指定的市场类型按钮
                     button = WebDriverWait(driver, 10).until(
                         EC.element_to_be_clickable((By.ID, MARKET_TYPES[market_type]))
                     )
                     button.click()
                     print(f"{account['username']} 已点击 {market_type} 按钮")
-                except Exception as e:
-                    print(f"{account['username']} 点击 {market_type} 按钮失败: {e}")
-                    traceback.print_exc()
-                # 等待页面加载
-                time.sleep(5)
 
-                # 进入数据抓取循环
-                while True:
-                    try:
-                        soup = get_market_data(driver)
-                        if soup:
-                            data = parse_market_data(soup, market_type)
+                    # 等待页面加载
+                    time.sleep(5)
 
-                            save_to_csv(data, filename)
-                            print(f"{account['username']} 成功获取并保存数据")
-                        else:
-                            print(f"{account['username']} 未获取到数据")
-                    except Exception as e:
-                        print(f"{account['username']} 抓取数据时发生错误: {e}")
-                        traceback.print_exc()
-                    time.sleep(t)
-    except Exception as e:
-        print(f"{account['username']} 运行过程中发生错误: {e}")
-        traceback.print_exc()
-    finally:
-        driver.quit()
-        print(f"{account['username']} 已关闭浏览器")
+                    # 进入数据抓取循环
+                    while True:
+                        try:
+                            soup = get_market_data(driver)
+                            if soup:
+                                data = parse_market_data(soup, market_type)
+                                save_to_csv(data, filename)
+                                #print(f"{account['username']} 成功获取并保存数据")
+                            else:
+                                print(f"{account['username']} 未获取到数据")
+                        except Exception as e:
+                            print(f"{account['username']} 抓取数据时发生错误: {e}")
+                            traceback.print_exc()
+                        time.sleep(t)
+        except Exception as e:
+            print(f"{account['username']} 运行过程中发生错误: {e}")
+            traceback.print_exc()
+        finally:
+            if driver:
+                driver.quit()
+                print(f"{account['username']} 已关闭浏览器")
+
+        # 等待一段时间后重启抓取过程，避免过于频繁的重启
+        print(f"{account['username']} 准备重新启动抓取线程...")
+        time.sleep(5)  # 可根据需要调整等待时间
 
 
 if __name__ == "__main__":
     # 创建线程列表
     threads = []
     # 第一个线程，获取 HDP & O/U 数据（同时包含全场和上半场）
-    thread1 = threading.Thread(target=run_scraper, args=(ACCOUNTS[0], 'HDP_OU', 'hdp_ou_data.csv', 0.1))
+    thread1 = threading.Thread(target=run_scraper, args=(ACCOUNTS[0], 'HDP_OU', 'hdp_ou_data.csv', 0.1), daemon=True)
     threads.append(thread1)
     # 第二个线程，获取 CORNERS 数据
-    thread2 = threading.Thread(target=run_scraper, args=(ACCOUNTS[1], 'CORNERS', 'corners_data.csv', 0.1))
+    thread2 = threading.Thread(target=run_scraper, args=(ACCOUNTS[1], 'CORNERS', 'corners_data.csv', 0.1), daemon=True)
     threads.append(thread2)
 
     # 启动线程

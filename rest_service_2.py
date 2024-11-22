@@ -9,6 +9,7 @@ app = Flask(__name__)
 cached_data = []
 data_lock = threading.Lock()
 
+
 def scraping_loop():
     """
     持续抓取数据并更新缓存。
@@ -36,6 +37,7 @@ def scraping_loop():
         driver.quit()
         print("浏览器已关闭。")
 
+
 @app.route('/matches', methods=['GET'])
 def get_matches():
     """
@@ -43,6 +45,7 @@ def get_matches():
     """
     with data_lock:
         return jsonify(cached_data)
+
 
 if __name__ == '__main__':
     # 启动抓取线程
