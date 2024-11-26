@@ -16,7 +16,6 @@ import traceback
 
 # 配置部分，请替换为您的实际用户名和密码
 ACCOUNTS = [
-    {'username': 'dtyc0lDM0', 'password': 'dddd1111DD'},
     {'username': 'dtyc23DM1', 'password': 'dddd1111DD'},
     {'username': 'dtyc6yDM2', 'password': 'dddd1111DD'},
 ]
@@ -457,10 +456,10 @@ if __name__ == "__main__":
     # 创建线程列表
     threads = []
     # 第一个线程，获取 HDP & O/U 数据（同时包含全场和上半场）
-    thread1 = threading.Thread(target=run_scraper, args=(ACCOUNTS[0], 'HDP_OU', 'hdp_ou_data.csv', 0.1), daemon=True)
+    thread1 = threading.Thread(target=run_scraper, args=(ACCOUNTS[0], 'HDP_OU', 'hdp_ou_data.csv', 0.3), daemon=True)
     threads.append(thread1)
     # 第二个线程，获取 CORNERS 数据
-    thread2 = threading.Thread(target=run_scraper, args=(ACCOUNTS[1], 'CORNERS', 'corners_data.csv', 0.1), daemon=True)
+    thread2 = threading.Thread(target=run_scraper, args=(ACCOUNTS[1], 'CORNERS', 'corners_data.csv', 0.3), daemon=True)
     threads.append(thread2)
 
     # 启动线程
