@@ -10,31 +10,22 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 from bs4 import BeautifulSoup
 import time
-import csv
-import threading
-import requests  # 用于发送数据到其他服务器
+
 
 # 配置部分
 USERNAME = 'dtycj0DM4'  # 替换为您的实际用户名
 PASSWORD = 'dddd1111DD'  # 替换为您的实际密码
 BASE_URL = 'https://123.108.119.156/'  # 登录页面的URL
 
-# 目标服务器的URL（用于发送数据）
-TARGET_SERVER_URL = 'https://yourserver.com/receive_data'  # 替换为您的目标服务器URL
-
 
 def init_driver():
     chrome_options = Options()
-    # 取消无头模式，便于观察浏览器行为
-    chrome_options.add_argument('--headless')  # 调试完成后可取消注释
+    chrome_options.add_argument('--headless')  # 启用无头模式
     chrome_options.add_argument('--disable-gpu')
     chrome_options.add_argument('--window-size=1920,1080')
-    # 忽略 SSL 证书错误
     chrome_options.add_argument('--ignore-certificate-errors')
     chrome_options.add_argument('--allow-insecure-localhost')
-    # 禁用扩展，避免干扰
     chrome_options.add_argument('--disable-extensions')
-    # 禁用自动化控制提示
     chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
     chrome_options.add_experimental_option('useAutomationExtension', False)
 
@@ -54,38 +45,33 @@ def init_driver():
 
 def login(driver):
     driver.get(BASE_URL)
-    wait = WebDriverWait(driver, 30)
+    wait = WebDriverWait(driver, 60)
 
     try:
-        # 打印登录尝试信息
-        print(f"正在登录")
+        print("正在登录")
 
         # 等待并找到用户名输入框
         username_field = wait.until(EC.visibility_of_element_located((By.ID, 'usr')))
         password_field = wait.until(EC.visibility_of_element_located((By.ID, 'pwd')))
-        # print("找到用户名和密码输入框")
 
         # 输入用户名和密码
         username_field.clear()
         username_field.send_keys(USERNAME)
         password_field.clear()
         password_field.send_keys(PASSWORD)
-        # print("已输入用户名和密码")
 
         # 等待登录按钮可点击并点击
         login_button = wait.until(EC.element_to_be_clickable((By.ID, 'btn_login')))
         login_button.click()
-        # print("已点击登录按钮")
 
         # 处理可能出现的 passcode 弹窗
         try:
-            popup_wait = WebDriverWait(driver, 5)  # 设置较短的等待时间
+            popup_wait = WebDriverWait(driver, 10)  # 设置较长的等待时间
             no_button = popup_wait.until(EC.element_to_be_clickable((By.ID, 'C_no_btn')))
             no_button.click()
-            # print("已点击 'NO' 按钮，关闭 passcode 弹窗")
+            print("已点击 'NO' 按钮，关闭 passcode 弹窗")
         except:
-            pass
-            # print("未发现 passcode 弹窗，继续执行")
+            print("未发现 passcode 弹窗，继续执行")
 
         # 等待足球按钮出现，确认登录成功
         wait.until(EC.visibility_of_element_located((By.XPATH, '//div[span[text()="Soccer"]]')))
@@ -97,12 +83,25 @@ def login(driver):
 
 
 def navigate_to_football(driver):
-    wait = WebDriverWait(driver, 30)
+    wait = WebDriverWait(driver, 60)
     try:
-        # 使用文本内容定位足球按钮
-        football_button = wait.until(EC.element_to_be_clickable((By.XPATH, '//div[span[text()="Soccer"]]')))
-        football_button.click()
-        print("正在导航到足球页面")
+        # 点击 TODAY 按钮
+        today_button = wait.until(EC.element_to_be_clickable((By.ID, 'today_page')))
+        today_button.click()
+        print("已点击 TODAY 按钮")
+
+        # 等待页面刷新后，body_loading 消失
+        wait.until(EC.invisibility_of_element_located((By.ID, 'body_loading')))
+        print("TODAY 页面加载完成")
+
+        # 点击 ALL 按钮
+        all_button = wait.until(EC.element_to_be_clickable((By.ID, 'league_tab_mix')))
+        all_button.click()
+        print("已点击 ALL 按钮")
+
+        # 再次等待 body_loading 消失
+        wait.until(EC.invisibility_of_element_located((By.ID, 'body_loading')))
+        print("ALL 页面加载完成")
 
         # 等待比赛列表容器加载完成
         wait.until(EC.visibility_of_element_located((By.ID, 'div_show')))
@@ -120,8 +119,6 @@ def navigate_to_football(driver):
 
 def fetch_data(driver):
     try:
-        # 不刷新页面，直接获取最新的页面元素
-        # 等待比赛列表容器加载完成
         wait = WebDriverWait(driver, 10)
         wait.until(EC.visibility_of_element_located((By.ID, 'div_show')))
 
@@ -130,7 +127,7 @@ def fetch_data(driver):
         inner_html = matches_container.get_attribute('innerHTML')
         soup = BeautifulSoup(inner_html, 'html.parser')
 
-        data = []
+        fixtures = []
 
         # 找到所有联赛容器
         league_containers = soup.find_all('div', class_='btn_title_le')
@@ -140,16 +137,13 @@ def fetch_data(driver):
             league_name_tag = league_container.find('tt', id='lea_name')
             if league_name_tag:
                 current_league = league_name_tag.get_text(strip=True)
-                # print(f"找到联赛: {current_league}")
             else:
                 # 尝试其他方式获取联赛名称
                 league_name_tag = league_container.find('span', class_='text_league')
                 if league_name_tag:
                     current_league = league_name_tag.get_text(strip=True)
-                    # print(f"找到联赛: {current_league}")
                 else:
                     current_league = "Unknown League"
-                    # print("未找到联赛名称，使用默认值")
 
             # 从联赛容器开始，遍历其后面的兄弟元素，直到下一个联赛容器
             next_sibling = league_container.find_next_sibling()
@@ -171,134 +165,29 @@ def fetch_data(driver):
                         away_team_name_tag = away_team_tag.find('span', class_='text_team')
                         away_team = away_team_name_tag.get_text(strip=True) if away_team_name_tag else "Unknown"
 
-                        # print(f"找到比赛: {home_team} vs {away_team}")
-
-                        # 提取比分和比赛时间等信息
-                        match_info = {}
-
-                        # 比赛时间
-                        time_tag = match_container.find('i', id='icon_info')
-                        match_time = time_tag.get_text(strip=True) if time_tag else "Unknown Time"
-                        match_info['match_time'] = match_time
-
-                        # 比分
-                        score_tags = match_container.find_all('span', class_='text_point')
-                        if score_tags and len(score_tags) >= 2:
-                            home_score = score_tags[0].get_text(strip=True)
-                            away_score = score_tags[1].get_text(strip=True)
-                        else:
-                            home_score = away_score = "0"
-                        match_info['home_score'] = home_score
-                        match_info['away_score'] = away_score
-
-                        # 提取赔率信息
-                        odds = {}
-                        # 找到所有赔率部分
-                        odds_sections = match_container.find_all('div', class_='box_lebet_odd')
-
-                        for odds_section in odds_sections:
-                            # 获取盘口类型
-                            bet_type_tag = odds_section.find('div', class_='head_lebet')
-                            bet_type = bet_type_tag.get_text(strip=True) if bet_type_tag else "Unknown Bet Type"
-
-                            # 获取所有赔率按钮
-                            odds_buttons = odds_section.find_all('div', class_='btn_lebet_odd')
-                            for btn in odds_buttons:
-                                # 获取盘口详情
-                                bet_detail_tag = btn.find(['tt', 'span'], class_=lambda x: x and (
-                                            'text_ballhead' in x or 'text_ballou' in x))
-                                bet_detail = bet_detail_tag.get_text(
-                                    strip=True) if bet_detail_tag else "Unknown Bet Detail"
-
-                                # 获取赔率值
-                                odd_value_tag = btn.find('span', class_='text_odds')
-                                odd_value = odd_value_tag.get_text(strip=True) if odd_value_tag else ""
-
-                                if odd_value:
-                                    full_bet_type = f"{bet_type} - {bet_detail}"
-                                    odds[full_bet_type] = odd_value
-                                    # print(f"找到赔率 - {full_bet_type}: {odd_value}")
-
-                        # 合并比赛信息和赔率信息
-                        match_info.update({
+                        fixture = {
                             'league': current_league,
                             'home_team': home_team,
-                            'away_team': away_team,
-                            'odds': odds
-                        })
+                            'away_team': away_team
+                        }
 
-                        data.append(match_info)
+                        fixtures.append(fixture)
                     else:
                         print("未能找到主队或客队名称，跳过此比赛")
 
                 # 继续遍历下一个兄弟元素
                 next_sibling = next_sibling.find_next_sibling()
 
-        return data
+        scraped_data = {
+            "count": len(fixtures),
+            "fixtures": fixtures
+        }
+
+        return scraped_data
 
     except Exception as e:
         print(f"抓取数据失败: {e}")
-        return []
-
-
-def save_to_csv(data, filename='matches.csv'):
-    if not data:
-        print("没有数据可保存。")
-        return
-    # 获取所有赔率类型
-    all_odds_types = set()
-    for item in data:
-        all_odds_types.update(item['odds'].keys())
-    all_odds_types = sorted(all_odds_types)
-
-    # 定义CSV的表头，添加比分和比赛时间
-    keys = ['league', 'match_time', 'home_team', 'away_team', 'home_score', 'away_score'] + all_odds_types
-    with open(filename, 'w', newline='', encoding='utf-8') as output_file:
-        dict_writer = csv.DictWriter(output_file, fieldnames=keys)
-        dict_writer.writeheader()
-        for item in data:
-            row = {
-                'league': item['league'],
-                'match_time': item['match_time'],
-                'home_team': item['home_team'],
-                'away_team': item['away_team'],
-                'home_score': item['home_score'],
-                'away_score': item['away_score']
-            }
-            # 填充赔率
-            for bet_type in all_odds_types:
-                row[bet_type] = item['odds'].get(bet_type, '')
-            dict_writer.writerow(row)
-    print(f"数据已保存到 {filename}")
-
-
-def run_scraper():
-    driver = init_driver()
-    try:
-        if login(driver):
-            if navigate_to_football(driver):
-                while True:
-                    start_time = time.time()
-                    data = fetch_data(driver)
-                    if data:
-                        # 打印抓取的比赛数量
-                        print(f"抓取到 {len(data)} 场比赛的数据")
-                        # 保存到CSV
-                        save_to_csv(data)
-                    else:
-                        print("未抓取到任何数据")
-
-                    # 计算抓取和处理时间
-                    elapsed_time = time.time() - start_time
-                    # 如果抓取时间小于1秒，等待剩余时间
-                    if elapsed_time < 1:
-                        time.sleep(1 - elapsed_time)
-    except KeyboardInterrupt:
-        print("停止抓取")
-    finally:
-        driver.quit()
-        print("已关闭浏览器")
-
-
-if __name__ == "__main__":
-    run_scraper()
+        return {
+            "count": 0,
+            "fixtures": []
+        }

@@ -360,14 +360,6 @@ def save_to_csv(data, filename):
 
 
 def send_csv_as_json(csv_file_path, server_url, t, info):
-    """
-    将最新的 CSV 文件内容转换为 JSON 格式，并按指定时间间隔发送到 Java 服务器。
-
-    :param csv_file_path: CSV 文件路径
-    :param server_url: Java 服务器的 URL
-    :param t: 数据发送间隔时间（以秒为单位）
-    :param info: 用于标记日志的类型信息
-    """
     print(f"正在发送 {info} 数据...")
     try:
         # 循环发送数据
@@ -383,8 +375,6 @@ def send_csv_as_json(csv_file_path, server_url, t, info):
                 # 将数据转换为 JSON 格式
                 json_data = data.to_dict(orient='records')
 
-
-
                 # 发送数据
                 headers = {'Content-Type': 'application/json'}
                 response = requests.post(server_url, json=json_data, headers=headers)
@@ -399,7 +389,8 @@ def send_csv_as_json(csv_file_path, server_url, t, info):
             except FileNotFoundError:
                 print(f"文件未找到: {csv_file_path}")
             except Exception as e:
-                print(f"处理 CSV 文件时发生错误: {e}")
+                #print(f"处理 CSV 文件时发生错误: {e}")
+                pass
 
             # 等待指定时间间隔
             time.sleep(t)

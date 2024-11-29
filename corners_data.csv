@@ -1,6 +1,5 @@
-league,match_time,home_team,away_team,home_score,away_score,home_corners,away_corners,NEXT_CORNER_FT_3rd_Odds,NEXT_CORNER_FT_3rd_Odds_2,NEXT_CORNER_FT_4th_Odds,NEXT_CORNER_FT_4th_Odds_2,NEXT_CORNER_FT_6th_Odds,NEXT_CORNER_FT_6th_Odds_2,ODD_EVEN_FT_Odds,ODD_EVEN_FT_Odds_2,SPREAD__+0.5/1_Odds,SPREAD__-0.5/1_Odds,TOTAL_POINTS_1H_3.5_OverOdds,TOTAL_POINTS_1H_3.5_UnderOdds,TOTAL_POINTS_FT_7.5_OverOdds,TOTAL_POINTS_FT_7.5_UnderOdds,TOTAL_POINTS_FT_7_OverOdds,TOTAL_POINTS_FT_7_UnderOdds,TOTAL_POINTS_FT_8.5_OverOdds,TOTAL_POINTS_FT_8.5_UnderOdds
-India Super League,2H96:30,Mumbai City,Punjab,9,3,,,,,,,,,,,,,,,,,,,,
-Russia Cup,1H39:48,Shinnik Yaroslavl,Akron Togliatti,1,2,,,,,0.65,1.17,,,1.93,1.93,0.84,0.88,1.04,0.78,,,,,1.07,0.75
-Portugal Liga Revelacao U23,HT,Vizela U23,SCU Torreense U23,1,1,,,2.22,0.25,,,,,1.93,1.93,,,,,,,0.76,1.06,,
-Saudi Division 1,2H63:05,Al Adalah,Al Jandal,3,2,,,,,,,0.45,1.53,1.92,1.94,,,,,0.91,0.91,,,,
-*LEAGUE*,Unknown Time,Unknown,Unknown,0,0,,,,,,,,,,,,,,,,,,,,
+league,match_time,home_team,away_team,home_score,away_score,home_corners,away_corners,NEXT_CORNER_FT_10th_Odds,NEXT_CORNER_FT_10th_Odds_2,NEXT_CORNER_FT_11th_Odds,NEXT_CORNER_FT_11th_Odds_2,ODD_EVEN_FT_Odds,ODD_EVEN_FT_Odds_2,SPREAD__+0/0.5_Odds,SPREAD__+2.5_Odds,SPREAD__-0/0.5_Odds,SPREAD__-2.5_Odds,TOTAL_POINTS_FT_11.5_OverOdds,TOTAL_POINTS_FT_11.5_UnderOdds,TOTAL_POINTS_FT_13_OverOdds,TOTAL_POINTS_FT_13_UnderOdds
+UEFA Conference League,2H61:21,Astana,Vitoria Guimaraes,1,8,,,3.33,0.10,,,1.93,1.93,,0.86,,0.86,,,1.06,0.76
+Saudi Pro League,2H98:56,Al Fayha,Al Orobah Sakakah,12,4,,,,,,,,,,,,,,,,
+Saudi Pro League,2H79:43,Al Okhdood,Al Kholood,4,6,,,,,0.60,1.25,1.97,1.89,0.85,,0.87,,0.73,1.09,,
+*LEAGUE*,Unknown Time,Unknown,Unknown,0,0,,,,,,,,,,,,,,,,
