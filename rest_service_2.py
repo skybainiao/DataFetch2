@@ -41,6 +41,7 @@ def get_matches():
     try:
         data = fetch_data(driver)
         with data_lock:
+            cached_data['dataSource'] = 2
             cached_data['count'] = data['count']
             cached_data['fixtures'] = data['fixtures']
         print(f"返回数据: {data['count']} 场比赛")
