@@ -1,5 +1,4 @@
-league,match_time,home_team,away_team,home_score,away_score,home_corners,away_corners,NEXT_CORNER_FT_10th_Odds,NEXT_CORNER_FT_10th_Odds_2,NEXT_CORNER_FT_11th_Odds,NEXT_CORNER_FT_11th_Odds_2,ODD_EVEN_FT_Odds,ODD_EVEN_FT_Odds_2,SPREAD__+0/0.5_Odds,SPREAD__+2.5_Odds,SPREAD__-0/0.5_Odds,SPREAD__-2.5_Odds,TOTAL_POINTS_FT_11.5_OverOdds,TOTAL_POINTS_FT_11.5_UnderOdds,TOTAL_POINTS_FT_13_OverOdds,TOTAL_POINTS_FT_13_UnderOdds
-UEFA Conference League,2H61:21,Astana,Vitoria Guimaraes,1,8,,,3.33,0.10,,,1.93,1.93,,0.86,,0.86,,,1.06,0.76
-Saudi Pro League,2H98:56,Al Fayha,Al Orobah Sakakah,12,4,,,,,,,,,,,,,,,,
-Saudi Pro League,2H79:43,Al Okhdood,Al Kholood,4,6,,,,,0.60,1.25,1.97,1.89,0.85,,0.87,,0.73,1.09,,
+league,match_time,home_team,away_team,home_score,away_score,home_corners,away_corners,NEXT_CORNER_FT_1st_Odds,NEXT_CORNER_FT_1st_Odds_2,ODD_EVEN_FT_Odds,ODD_EVEN_FT_Odds_2,SPREAD__+0.5_Odds,SPREAD__+1_Odds,SPREAD__-0.5_Odds,SPREAD__-1_Odds,TOTAL_POINTS_1H_2.5_OverOdds,TOTAL_POINTS_1H_2.5_UnderOdds,TOTAL_POINTS_FT_5_OverOdds,TOTAL_POINTS_FT_5_UnderOdds,TOTAL_POINTS_FT_7_OverOdds,TOTAL_POINTS_FT_7_UnderOdds
+Argentina Liga Profesional,1H43:51,CA Platense,Union Santa Fe,0,0,,,0.85,0.95,1.93,1.93,0.81,,0.91,,,,1.35,0.56,,
+Argentina Liga Profesional,1H15:31,Talleres De Cordoba,Huracan,0,0,,,0.60,1.25,1.93,1.93,,0.81,,0.91,1.01,0.81,,,1.06,0.76
 *LEAGUE*,Unknown Time,Unknown,Unknown,0,0,,,,,,,,,,,,,,,,

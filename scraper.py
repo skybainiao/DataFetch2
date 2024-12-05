@@ -1,16 +1,17 @@
 # scraper.py
 
 from selenium import webdriver
-from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
 from bs4 import BeautifulSoup
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import logging
+from bs4 import BeautifulSoup
 import time
-
 
 # 配置部分
 USERNAME = 'dtycj0DM4'  # 替换为您的实际用户名
@@ -49,7 +50,9 @@ def login(driver):
 
     try:
         print("正在登录")
-
+        # 选择语言
+        lang_field = wait.until(EC.visibility_of_element_located((By.ID, 'lang_en')))
+        lang_field.click()
         # 等待并找到用户名输入框
         username_field = wait.until(EC.visibility_of_element_located((By.ID, 'usr')))
         password_field = wait.until(EC.visibility_of_element_located((By.ID, 'pwd')))
@@ -117,6 +120,8 @@ def navigate_to_football(driver):
         return False
 
 
+
+
 def fetch_data(driver):
     try:
         wait = WebDriverWait(driver, 10)
@@ -132,7 +137,7 @@ def fetch_data(driver):
         # 找到所有联赛容器
         league_containers = soup.find_all('div', class_='btn_title_le')
 
-        for league_container in league_containers:
+        for league_index, league_container in enumerate(league_containers, start=1):
             # 获取联赛名称
             league_name_tag = league_container.find('tt', id='lea_name')
             if league_name_tag:
@@ -145,13 +150,22 @@ def fetch_data(driver):
                 else:
                     current_league = "Unknown League"
 
+            logging.info(f"Processing League {league_index}: {current_league}")
+
             # 从联赛容器开始，遍历其后面的兄弟元素，直到下一个联赛容器
             next_sibling = league_container.find_next_sibling()
-            while next_sibling:
-                # 如果遇到下一个联赛，停止处理当前联赛
-                if 'btn_title_le' in next_sibling.get('class', []):
+            loop_counter = 0  # 防止无限循环
+            MAX_ITERATIONS = 100  # 最大循环次数
+
+            while next_sibling and loop_counter < MAX_ITERATIONS:
+                loop_counter += 1
+
+                classes = next_sibling.get('class', [])
+                if 'btn_title_le' in classes:
+                    # 遇到下一个联赛，停止处理当前联赛
+                    logging.info("Reached the next league container. Stopping current league processing.")
                     break
-                elif 'box_lebet' in next_sibling.get('class', []):
+                elif 'box_lebet' in classes:
                     match_container = next_sibling
 
                     # 提取主队和客队名称
@@ -165,18 +179,46 @@ def fetch_data(driver):
                         away_team_name_tag = away_team_tag.find('span', class_='text_team')
                         away_team = away_team_name_tag.get_text(strip=True) if away_team_name_tag else "Unknown"
 
+                        # 提取比赛时间
+                        match_time_tag = match_container.find('tt', class_='text_time')
+                        match_time_raw = (
+                            match_time_tag.find('i', id='icon_info').get_text(strip=True)
+                            if match_time_tag and match_time_tag.find('i', id='icon_info') else 'Unknown Time'
+                        )
+
+                        # 打印时间换算前的原始时间
+                        print(f"原始时间: {match_time_raw}")
+
+                        # 处理比赛时间
+                        if "Today" in match_time_raw:
+                            # 去掉 "Today" 前缀，只保留时间部分
+                            match_time_standard = match_time_raw.replace("Today", "").strip()
+                            status = "upcoming"
+                            logging.info(f"比赛 '{home_team} vs {away_team}' 状态: {status}, 时间: {match_time_standard}")
+                        else:
+                            # 其他时间保持不变，标注为已开赛
+                            match_time_standard = match_time_raw
+                            status = "live"
+                            logging.info(f"比赛 '{home_team} vs {away_team}' 状态: {status}, 时间: {match_time_standard}")
+
+                        # 添加比赛信息
                         fixture = {
                             'league': current_league,
                             'home_team': home_team,
-                            'away_team': away_team
+                            'away_team': away_team,
+                            'time': match_time_standard,  # 原始比赛时间（去掉 "Today"）
+                            #'status': status  # 比赛状态
                         }
 
                         fixtures.append(fixture)
+                        print(f"添加比赛: {fixture}")
                     else:
                         print("未能找到主队或客队名称，跳过此比赛")
 
                 # 继续遍历下一个兄弟元素
                 next_sibling = next_sibling.find_next_sibling()
+
+            logging.info(f"League '{current_league}' has been processed.")
 
         scraped_data = {
             "count": len(fixtures),
@@ -186,8 +228,9 @@ def fetch_data(driver):
         return scraped_data
 
     except Exception as e:
-        print(f"抓取数据失败: {e}")
+        logging.error(f"抓取数据失败: {e}")
         return {
             "count": 0,
             "fixtures": []
         }
+
